@@ -4,10 +4,9 @@ export default class Snake {
     this.gameHeight = height;
     this.width = 5;
     this.height = 5;
-    this.padding = 0;
     this.length = 10;
     this.head = {
-      x: this.length * (this.width + this.padding),
+      x: this.length * this.width,
       y: this.gameHeight - this.height
     };
     this.maxSpeed = 5;
@@ -18,7 +17,7 @@ export default class Snake {
     this.body = [];
     for (let i = 1; i <= this.length; i++) {
       this.body.push({
-        x: this.head.x - i * (this.width + this.padding),
+        x: this.head.x - i * this.width,
         y: this.gameHeight - this.height
       });
     }
@@ -47,6 +46,20 @@ export default class Snake {
       return;
     }
     if (
+      (this.head.x + this.width === this.gameWidth && this.speed.x > 0) ||
+      (this.head.x === 0 && this.speed.x < 0)
+    ) {
+      this.stop();
+      return;
+    }
+    if (
+      (this.head.y + this.width === this.gameHeight && this.speed.y > 0) ||
+      (this.head.y === 0 && this.speed.y < 0)
+    ) {
+      this.stop();
+      return;
+    }
+    if (
       this.head.x <= this.food.x &&
       this.food.x <= this.head.x + this.width &&
       this.head.y <= this.food.y &&
@@ -54,7 +67,7 @@ export default class Snake {
     ) {
       window.console.log('Delicious');
       this.body.push({
-        x: this.head.x - this.length * (this.width + this.padding),
+        x: this.head.x - this.length * this.width,
         y: this.head.y - this.height
       });
       this.food.x = this.getRandomArbitrary(0, this.gameWidth);
