@@ -23,12 +23,14 @@ export default class Snake {
       });
     }
     this.food = {
-      x: 0, //this.getRandomArbitrary(10, this.gameWidth),
-      y: 0 //this.gameHeight //this.getRandomArbitrary(10, this.gameHeight)
+      x: this.getRandomArbitrary(0, this.gameWidth),
+      y: this.getRandomArbitrary(0, this.gameHeight)
     };
   }
   getRandomArbitrary(min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
+    const rand = Math.floor(Math.random() * (max - min) + min);
+    let rem = rand % this.maxSpeed;
+    return (rand + rem) % this.maxSpeed === 0 ? rand + rem : rand - rem;
   }
   draw(ctx) {
     ctx.fillStyle = '#f00';
@@ -44,14 +46,19 @@ export default class Snake {
     if (!this.speed.x && !this.speed.y) {
       return;
     }
-    if (this.head.x === this.food.x + this.speed.x) {
+    if (
+      this.head.x <= this.food.x &&
+      this.food.x <= this.head.x + this.width &&
+      this.head.y <= this.food.y &&
+      this.food.y <= this.head.y + this.width
+    ) {
       window.console.log('Delicious');
       this.body.push({
         x: this.head.x - this.length * (this.width + this.padding),
         y: this.head.y - this.height
       });
-      this.food.x = this.getRandomArbitrary(10, this.gameWidth);
-      this.food.y = this.getRandomArbitrary(10, this.gameHeight);
+      this.food.x = this.getRandomArbitrary(0, this.gameWidth);
+      this.food.y = this.getRandomArbitrary(0, this.gameHeight);
     }
     let { x, y } = this.head;
     this.head.x += this.speed.x;
