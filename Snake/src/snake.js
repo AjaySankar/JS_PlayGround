@@ -24,11 +24,6 @@ export default class Snake {
       });
     }
   }
-  getRandomArbitrary(min, max) {
-    const rand = Math.floor(Math.random() * (max - min) + min);
-    let rem = rand % this.maxSpeed;
-    return (rand + rem) % this.maxSpeed === 0 ? rand + rem : rand - rem;
-  }
   draw(ctx) {
     ctx.fillStyle = '#f00';
     ctx.fillRect(this.head.x, this.head.y, this.width, this.height);
@@ -62,6 +57,7 @@ export default class Snake {
       }
     });
     if (this.didEatFood()) {
+      this.game.score++;
       window.console.log('Delicious');
       this.body.push({
         x: this.head.x - this.length * this.width,

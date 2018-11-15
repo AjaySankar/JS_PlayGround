@@ -10,7 +10,7 @@ const GAMESTATE = {
 };
 
 export default class Game {
-  constructor(gameWidth, gameHeight) {
+  constructor(gameWidth, gameHeight, scoreBoard) {
     this.gameWidth = gameWidth;
     this.gameHeight = gameHeight;
     this.gameState = GAMESTATE.MENU;
@@ -19,6 +19,8 @@ export default class Game {
     this.gameObjects = [];
     this.lives = 3;
     new InputHandler(this.snake, this);
+    this.scoreBoard = scoreBoard;
+    this.score = 0;
   }
   start() {
     if (this.gameState !== GAMESTATE.MENU) {
@@ -43,6 +45,7 @@ export default class Game {
     [...this.gameObjects].forEach(object => object.update());
   }
   draw(ctx) {
+    this.scoreBoard.innerHTML = `<h3> Your Score is: ${this.score} </h3> <br> <h3> Your lives left are: ${this.lives} </h3>`;
     [...this.gameObjects].forEach(object => object.draw(ctx));
     if (this.gameState === GAMESTATE.PAUSED) {
       ctx.rect(0, 0, this.gameWidth, this.gameHeight);
