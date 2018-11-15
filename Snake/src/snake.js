@@ -4,7 +4,7 @@ export default class Snake {
     this.gameHeight = height;
     this.width = 5;
     this.height = 5;
-    this.length = 10;
+    this.length = 50;
     this.head = {
       x: this.length * this.width,
       y: this.gameHeight - this.height
@@ -59,6 +59,11 @@ export default class Snake {
       this.stop();
       return;
     }
+    this.body.forEach(({ x, y }) => {
+      if (x === this.head.x && y === this.head.y) {
+        window.console.log('Ouch!!!');
+      }
+    });
     if (
       this.head.x <= this.food.x &&
       this.food.x <= this.head.x + this.width &&

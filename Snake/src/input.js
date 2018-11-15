@@ -1,5 +1,5 @@
 export default class InputHandler {
-  constructor(snake) {
+  constructor(snake, game) {
     document.addEventListener('keydown', event => {
       switch (event.keyCode) {
         case 37:
@@ -13,6 +13,12 @@ export default class InputHandler {
           break;
         case 40:
           snake.moveDown();
+          break;
+        case 27:
+          game.togglePause();
+          break;
+        case 32:
+          game.start();
           break;
         default:
           break;
