@@ -1,7 +1,9 @@
+/*eslint no-mixed-operators: 0 */
 export default class Snake {
-  constructor(width, height) {
-    this.gameWidth = width;
-    this.gameHeight = height;
+  constructor(game) {
+    this.gameWidth = game.gameWidth;
+    this.gameHeight = game.gameHeight;
+    this.game = game;
     this.width = 5;
     this.height = 5;
     this.length = 50;
@@ -21,10 +23,6 @@ export default class Snake {
         y: this.gameHeight - this.height
       });
     }
-    this.food = {
-      x: this.getRandomArbitrary(0, this.gameWidth),
-      y: this.getRandomArbitrary(0, this.gameHeight)
-    };
   }
   getRandomArbitrary(min, max) {
     const rand = Math.floor(Math.random() * (max - min) + min);
@@ -38,8 +36,6 @@ export default class Snake {
       ctx.fillStyle = '#000';
       ctx.fillRect(b.x, b.y, this.width, this.height);
     });
-    ctx.fillStyle = '#000';
-    ctx.fillRect(this.food.x, this.food.y, this.width, this.height);
   }
   update() {
     if (!this.speed.x && !this.speed.y) {
@@ -62,21 +58,16 @@ export default class Snake {
     this.body.forEach(({ x, y }) => {
       if (x === this.head.x && y === this.head.y) {
         window.console.log('Ouch!!!');
+        this.game.lives--;
       }
     });
-    if (
-      this.head.x <= this.food.x &&
-      this.food.x <= this.head.x + this.width &&
-      this.head.y <= this.food.y &&
-      this.food.y <= this.head.y + this.width
-    ) {
+    if (this.didEatFood()) {
       window.console.log('Delicious');
       this.body.push({
         x: this.head.x - this.length * this.width,
         y: this.head.y - this.height
       });
-      this.food.x = this.getRandomArbitrary(0, this.gameWidth);
-      this.food.y = this.getRandomArbitrary(0, this.gameHeight);
+      this.game.food.isEaten = true;
     }
     let { x, y } = this.head;
     this.head.x += this.speed.x;
@@ -85,6 +76,14 @@ export default class Snake {
       x: index ? this.body[index - 1].x : x,
       y: index ? this.body[index - 1].y : y
     }));
+  }
+  didEatFood() {
+    return (
+      this.head.x <= this.game.food.x &&
+      this.game.food.x <= this.head.x + this.width &&
+      this.head.y <= this.game.food.y &&
+      this.game.food.y <= this.head.y + this.width
+    );
   }
   moveLeft() {
     if (this.speed.x > 0) {

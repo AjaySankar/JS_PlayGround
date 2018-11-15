@@ -1,18 +1,21 @@
+/*eslint no-mixed-operators: 0 */
 export default class Food {
-  constructor(width, height){
-    this.gameWidth = width;
-    this.gameHeight = height;
+  constructor(game) {
+    this.gameWidth = game.gameWidth;
+    this.gameHeight = game.gameHeight;
     this.width = 5;
     this.height = 5;
-    this.food = {
-      x: this.getRandomArbitrary(0, this.gameWidth),
-      y: this.getRandomArbitrary(0, this.gameHeight)
-    };
+    this.x = this.getRandomArbitrary(0, this.gameWidth);
+    this.y = this.getRandomArbitrary(0, this.gameHeight);
+    this.isEaten = false;
   }
 
   update() {
-    this.food.x = this.getRandomArbitrary(0, this.gameWidth);
-    this.food.y = this.getRandomArbitrary(0, this.gameHeight);
+    if (this.isEaten) {
+      this.x = this.getRandomArbitrary(0, this.gameWidth);
+      this.y = this.getRandomArbitrary(0, this.gameHeight);
+      this.isEaten = false;
+    }
   }
 
   getRandomArbitrary(min, max) {
@@ -23,6 +26,6 @@ export default class Food {
 
   draw(ctx) {
     ctx.fillStyle = '#000';
-    ctx.fillRect(this.food.x, this.food.y, this.width, this.height);
+    ctx.fillRect(this.x, this.y, this.width, this.height);
   }
 }

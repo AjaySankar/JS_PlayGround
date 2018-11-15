@@ -1,5 +1,6 @@
 import Snake from './snake.js';
 import InputHandler from './input.js';
+import Food from './food.js';
 
 const GAMESTATE = {
   PAUSED: 0,
@@ -13,7 +14,8 @@ export default class Game {
     this.gameWidth = gameWidth;
     this.gameHeight = gameHeight;
     this.gameState = GAMESTATE.MENU;
-    this.snake = new Snake(gameWidth, gameHeight);
+    this.food = new Food(this);
+    this.snake = new Snake(this);
     this.gameObjects = [];
     this.lives = 3;
     new InputHandler(this.snake, this);
@@ -23,6 +25,7 @@ export default class Game {
       return;
     }
     this.gameObjects.push(this.snake);
+    this.gameObjects.push(this.food);
     this.gameState = GAMESTATE.RUNNING;
   }
   update() {
