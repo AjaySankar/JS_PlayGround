@@ -29,6 +29,9 @@ export default class Game {
     this.gameObjects.push(this.snake);
     this.gameObjects.push(this.food);
     this.gameState = GAMESTATE.RUNNING;
+    this.scoreBoard.innerHTML = `<h3> Your Score is: ${
+      this.score
+    } </h3> <br> <h3> Your lives left are: ${this.lives} </h3>`;
   }
   update() {
     if (this.lives === 0) {
@@ -45,7 +48,11 @@ export default class Game {
     [...this.gameObjects].forEach(object => object.update());
   }
   draw(ctx) {
-    this.scoreBoard.innerHTML = `<h3> Your Score is: ${this.score} </h3> <br> <h3> Your lives left are: ${this.lives} </h3>`;
+    if (this.gameState !== GAMESTATE.MENU) {
+      this.scoreBoard.innerHTML = `<h3> Your Score is: ${
+        this.score
+      } </h3> <br> <h3> Your lives left are: ${this.lives} </h3>`;
+    }
     [...this.gameObjects].forEach(object => object.draw(ctx));
     if (this.gameState === GAMESTATE.PAUSED) {
       ctx.rect(0, 0, this.gameWidth, this.gameHeight);
